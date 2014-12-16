@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<style>
+	.land {
+		fill: #000;
+		stroke-opacity: 1;
+	}
+
+	.point {  opacity:.6; }
+
+	.arcs {
+		opacity:.1;
+		stroke: rgba(0,0,0,.5);
+		stroke-width: 3;
+	}
+	.flyers {
+		stroke-width:1;
+		opacity: .6;
+		stroke: darkred; 
+	}
+	.arc, .flyer {
+		stroke-linejoin: round;
+		fill:none;
+	}
+	svg{
+		overflow: visible;
+	}
+</style>
+<body>
+	<header>
+		<h1></h1>
+		<p></p>
+	</header>
+	<section>
+		<span></span>
+	</section>
+</body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script src="client.js"></script>
+<script>
+	// get client location
+	// var xmlhttp = new XMLHttpRequest();
+	// xmlhttp.onreadystatechange=function() {
+	// 	if (xmlhttp.readyState==4 && xmlhttp.status==200){
+	// 		var response = JSON.parse(xmlhttp.responseText)
+	// 	}
+	// }
+	// xmlhttp.open("GET","http://ipinfo.io/?callback",true);
+	// xmlhttp.send();
+</script>
