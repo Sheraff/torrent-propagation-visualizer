@@ -13,8 +13,9 @@ Through the torrent protocol, it is easy to discover peers and localize their IP
 
 # files
 - [`ws.js`](https://github.com/Sheraff/torrent-propagation-visualizer/blob/master/ws.js) is meant to be the a websocket server used to discover peers for torrents and stream their GPS coordinates to the clients
-- [`client.js`](https://github.com/Sheraff/torrent-propagation-visualizer/blob/master/client.js) is the main script for the display of informations, both a websocket client (using [einaros' ws](https://github.com/einaros/ws)) and an SVG engine (using [d3.js](https://github.com/mbostock/d3) and [topojson](https://github.com/mbostock/topojson))
+- [`client.js`](https://github.com/Sheraff/torrent-propagation-visualizer/blob/master/client.js) is the main script for the display of informations, both a websocket client and an SVG "engine"
 
 # credits
-- peer discovery algorithm by [Feross](https://github.com/feross/bittorrent-dht)
+- websocket server by [einaros](https://github.com/einaros/ws)
+- peer discovery algorithm by [feross](https://github.com/feross/bittorrent-dht)
 - svg & d3 map representation by [dwtkns](https://gist.github.com/dwtkns/4973620) (demo [here](http://bl.ocks.org/dwtkns/4973620))
