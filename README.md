@@ -1,5 +1,6 @@
 Map popular torrents' peers over time
 ==============================
+**this project is open for collaboration**
 
 Through the torrent protocol, it is easy to discover peers and localize their IP addresses. Let’s use this info to track over time the geographical propagation of popular torrents (populars tv shows, YIFY movies…).
 
