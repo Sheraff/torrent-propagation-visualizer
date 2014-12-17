@@ -1,3 +1,15 @@
+// get client location
+var zero_point = [];
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange=function() {
+	if (xmlhttp.readyState==4 && xmlhttp.status==200){
+		var response = JSON.parse(xmlhttp.responseText)
+		zero_point = [response.loc[1], response.loc[0]];
+	}
+}
+xmlhttp.open("GET","http://ipinfo.io/?callback",true);
+xmlhttp.send();
+
 (function WebSocketBoot() {
 	// ws = new WebSocket("ws://vps62456.ovh.net:8080");
 	ws = new WebSocket("ws://localhost:8080");
@@ -34,7 +46,7 @@ function parseItem (item) {
 			p.innerHTML = item.text;
 			break;
 		case 'peer':
-			add_point([item.coords[1], item.coords[0]])
+			if(item.coords) add_point([item.coords[1], item.coords[0]])
 			break;
 	}
 }
@@ -50,11 +62,6 @@ var proj = d3.geo.orthographic()
 	.translate([width / 2, height / 2])
 	.clipAngle(90)
 	.scale(220);
-
-var sky = d3.geo.orthographic()
-	.translate([width / 2, height / 2])
-	.clipAngle(90)
-	.scale(300);
 
 var path = d3.geo.path().projection(proj).pointRadius(2);
 
@@ -88,14 +95,26 @@ function ready(error, world) {
 }
 
 function flying_arc(pts) {
-  var source = pts.source,
-	  target = pts.target;
+	var source = pts.source,
+		target = pts.target;
 
-  var mid = location_along_arc(source, target, .5);
-  var result = [ proj(source),
-				 sky(mid),
-				 proj(target) ]
-  return result;
+	// get canvas coords of arc midpoint and globe center
+	var mid = proj(location_along_arc(source, target, .5));
+	var ctr = proj.translate();
+	  
+	// max length of a great circle arc is π, 
+	// so 0.3 means longest path "flies" 20% of radius above the globe
+	var scale = 1 + 0.3 * d3.geo.distance(source,target) / Math.PI;
+	
+	mid[0] = ctr[0] + (mid[0]-ctr[0])*scale;
+	mid[1] = ctr[1] + (mid[1]-ctr[1])*scale;
+	  
+	var result = [
+		proj(source),
+		mid,
+		proj(target)
+	]
+	return result;
 }
 
 function add_point(coordinates){
@@ -142,19 +161,19 @@ function add_point(coordinates){
 }
 
 function refresh() {
-  svg.selectAll(".land").attr("d", path);
-  svg.selectAll(".point").attr("d", path);
-  
-  svg.selectAll(".arc").attr("d", path)
-	.attr("opacity", function(d) {
-		return fade_at_edge(d)
-	})
+	svg.selectAll(".land").attr("d", path);
+	// svg.selectAll(".point").attr("d", path);
 
-  svg.selectAll(".flyer")
-	.attr("d", function(d) { return swoosh(flying_arc(d)) })
-	.attr("opacity", function(d) {
-		return fade_at_edge(d)
-	}) 
+	// svg.selectAll(".arc").attr("d", path)
+	// 	.attr("opacity", function(d) {
+	// 	return fade_at_edge(d)
+	// })
+
+	svg.selectAll(".flyer")
+		.attr("d", function(d) { return swoosh(flying_arc(d)) })
+		.attr("opacity", function(d) {
+			return fade_at_edge(d)
+		})
 }
 
 function fade_at_edge(d) {
